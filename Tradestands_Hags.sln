@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tradestands_Hags.Console", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tradestands_Hags.Emails", "Tradestands_Hags.Emails\Tradestands_Hags.Emails.csproj", "{5D1D8716-D3F9-40B8-B25C-D6483A821567}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tradestands_Hags.GoogleSheets", "Tradestands_Hags.GoogleSheets\Tradestands_Hags.GoogleSheets.csproj", "{DBE2D12F-B38B-4034-AA86-BD16A5356E83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5D1D8716-D3F9-40B8-B25C-D6483A821567}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D1D8716-D3F9-40B8-B25C-D6483A821567}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D1D8716-D3F9-40B8-B25C-D6483A821567}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBE2D12F-B38B-4034-AA86-BD16A5356E83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBE2D12F-B38B-4034-AA86-BD16A5356E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBE2D12F-B38B-4034-AA86-BD16A5356E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBE2D12F-B38B-4034-AA86-BD16A5356E83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

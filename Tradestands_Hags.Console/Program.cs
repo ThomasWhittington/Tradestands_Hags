@@ -3,4 +3,4 @@ using Tradestands_Hags.Console;
 using Tradestands_Hags.Console.Extensions;
 
 var service = new ServiceCollection().Initialise<ConsoleManager>();
-service.Run();
+await service.Run();

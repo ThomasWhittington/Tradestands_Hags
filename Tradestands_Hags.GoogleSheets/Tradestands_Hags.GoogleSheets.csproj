@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Google.Apis.Sheets.v4" Version="1.68.0.3476"/>
+        <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0-preview.4.24266.19"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="google-sheets-credentials.json"/>
+        <Content Include="google-sheets-credentials.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+</Project>
