@@ -14,11 +14,10 @@ public class GoogleSheetService(IOptions<GoogleSheetsSecrets> secrets) : IGoogle
 
     public async Task Run()
     {
-        await ConnectToGoogle();
-        const string range = "A1:P";
+        ConnectToGoogle();
 
         SpreadsheetsResource.ValuesResource.GetRequest getRequest =
-            _sheetsService.Spreadsheets.Values.Get(_secrets.SheetId, range);
+            _sheetsService.Spreadsheets.Values.Get(_secrets.SheetId, _secrets.DataRange);
 
         var getResponse = await getRequest.ExecuteAsync();
         IList<IList<object>> values = getResponse.Values;
@@ -36,20 +35,15 @@ public class GoogleSheetService(IOptions<GoogleSheetsSecrets> secrets) : IGoogle
         }
     }
 
-    private async Task ConnectToGoogle()
+    private void ConnectToGoogle()
     {
-        GoogleCredential credential;
-        await using (var stream =
-                     new FileStream("google-sheets-credentials.json", FileMode.Open,
-                         FileAccess.Read))
-        {
-            credential = GoogleCredential.FromStream(stream).CreateScoped(Scope.Spreadsheets);
-        }
+        var credential = GoogleCredential.FromFile(_secrets.CredentialLocation)
+            .CreateScoped(Scope.Spreadsheets);
 
-        _sheetsService = new SheetsService(new BaseClientService.Initializer()
+        _sheetsService = new SheetsService(new BaseClientService.Initializer
         {
             HttpClientInitializer = credential,
-            ApplicationName = "Tradestands_Hags"
+            ApplicationName = _secrets.ApplicationName
         });
     }
 }
