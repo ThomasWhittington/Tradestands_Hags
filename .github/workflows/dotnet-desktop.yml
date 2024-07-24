@@ -57,6 +57,7 @@ jobs:
 
     env:
       Solution_Name: Tradestands_Hags.sln                       # Replace with your solution name, i.e. MyWpfApp.sln.
+      Wap_Project_Directory: Tradestands_Hags.Console                       # Replace with your solution name, i.e. MyWpfApp.sln.
 
     steps:
     - name: Checkout
