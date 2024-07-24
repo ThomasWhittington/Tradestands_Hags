@@ -15,37 +15,29 @@ public class MailService(IOptions<MailSettings> mailSettings) : IMailService
 
     public bool SendMail(MailData mailData)
     {
-        try
+        using var emailMessage = new MimeMessage();
+        var emailFrom =
+            new MailboxAddress(_mailSettings.SenderName, _mailSettings.EmailAddress);
+        emailMessage.From.Add(emailFrom);
+        var emailTo = new MailboxAddress(mailData.EmailToName, mailData.EmailToId);
+        emailMessage.To.Add(emailTo);
+        emailMessage.Subject = mailData.EmailSubject;
+
+        var emailBodyBuilder = new BodyBuilder
         {
-            using var emailMessage = new MimeMessage();
-            var emailFrom =
-                new MailboxAddress(_mailSettings.SenderName, _mailSettings.EmailAddress);
-            emailMessage.From.Add(emailFrom);
-            var emailTo = new MailboxAddress(mailData.EmailToName, mailData.EmailToId);
-            emailMessage.To.Add(emailTo);
-            emailMessage.Subject = mailData.EmailSubject;
+            TextBody = mailData.EmailBody
+        };
 
-            var emailBodyBuilder = new BodyBuilder
-            {
-                TextBody = mailData.EmailBody
-            };
+        emailMessage.Body = emailBodyBuilder.ToMessageBody();
 
-            emailMessage.Body = emailBodyBuilder.ToMessageBody();
+        using var mailClient = new SmtpClient();
+        mailClient.Connect(_mailSettings.SmtpServer, _mailSettings.SmtpPort);
+        mailClient.Authenticate(_mailSettings.EmailAddress, _mailSettings.Password);
+        mailClient.Send(emailMessage);
+        AddToSent(emailMessage);
+        mailClient.Disconnect(true);
 
-            using var mailClient = new SmtpClient();
-            mailClient.Connect(_mailSettings.SmtpServer, _mailSettings.SmtpPort);
-            mailClient.Authenticate(_mailSettings.EmailAddress, _mailSettings.Password);
-            mailClient.Send(emailMessage);
-            AddToSent(emailMessage);
-            mailClient.Disconnect(true);
-
-            return true;
-        }
-        catch (Exception ex)
-        {
-            // Exception Details
-            return false;
-        }
+        return true;
     }
 
     public void GetEmails()
@@ -57,8 +49,8 @@ public class MailService(IOptions<MailSettings> mailSettings) : IMailService
         var inbox = imap.Inbox;
         inbox.Open(FolderAccess.ReadOnly);
         var query = SearchQuery.All;
-        var uids = inbox.Search(query);
-        var items = inbox.Fetch(uids, MessageSummaryItems.Full | MessageSummaryItems.BodyStructure)
+        var uIds = inbox.Search(query);
+        var items = inbox.Fetch(uIds, MessageSummaryItems.Full | MessageSummaryItems.BodyStructure)
             .Reverse();
         foreach (var messageSummary in items) Console.WriteLine(messageSummary.NormalizedSubject);
     }
@@ -81,9 +73,7 @@ public class MailService(IOptions<MailSettings> mailSettings) : IMailService
             sent = personal.GetSubfolder("Sent Items");
         }
 
-        // Append the message to the Sent Items folder.
         sent.Append(message, MessageFlags.Seen);
-
         imap.Disconnect(true);
     }
 }
